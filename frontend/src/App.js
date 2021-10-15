@@ -5,6 +5,7 @@ import Nav from "react-bootstrap/Nav";
 import Container from "react-bootstrap/Container";
 import LoginPage from "./components/LoginPage";
 import Button from "react-bootstrap/Button";
+import SignUpPage from "./components/SignUpPage";
 
 // rafce
       // TODO fix navbar 'fixed' height
@@ -20,7 +21,7 @@ function App() {
             <Navbar.Toggle />
             <Navbar.Collapse>
               <Nav className="ms-auto">
-                <LinkContainer to="/">
+                <LinkContainer to="/signup">
                   <Nav.Link>
                     <Button variant="success">Sign up</Button>
                   </Nav.Link>
@@ -41,6 +42,8 @@ function App() {
           }}
         >
           <Route path="/" exact component={LoginPage} />
+          <Route path="/login" exact component={LoginPage} />
+          <Route path="/signup" exact component={SignUpPage} />
         </div>
 
         <footer
