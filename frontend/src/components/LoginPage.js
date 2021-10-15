@@ -5,21 +5,25 @@ import Button from "react-bootstrap/Button";
 import { useState } from "react";
 
 const LoginPage = () => {
-    const [validated, setValidated] = useState(false);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+  const [validated, setValidated] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [remember, setRemember] = useState(false);
 
-    const handleSubmit = (event) => {
-        const form = event.currentTarget;
-        if (form.checkValidity() === false) {
-            event.stopPropagation();
-        }
+  const handleSubmit = (event) => {
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.stopPropagation();
+    }
 
-        console.log(email)
-        console.log(password)
-        event.preventDefault();
-        setValidated(true);
-    };
+    console.log(email);
+    console.log(password);
+    console.log(remember);
+    event.preventDefault();
+    setValidated(true);
+    form[2].validated=false
+    console.log(form[2])
+  };
 
   return (
     <Card bg="dark" text="light" className="p-1" style={{ width: "18rem" }}>
@@ -50,10 +54,22 @@ const LoginPage = () => {
               type="password"
               placeholder="Password"
               value={password}
-              onChange={(event) => {setPassword(event.target.value)}}
+              onChange={(event) => {
+                setPassword(event.target.value);
+              }}
               required
             />
           </FloatingLabel>
+          <Form.Group className="mb-3">
+            <Form.Check
+              label="Stay logged in"
+              checked={remember}
+              value={remember}
+              onChange={(event) => {
+                setRemember(event.currentTarget.checked);
+              }}
+            />
+          </Form.Group>
           <Button type="submit" size="lg" className="w-100">
             Login
           </Button>
