@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Redirect} from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
@@ -10,6 +10,8 @@ import SignUpPage from "./components/SignUpPage";
 // rafce
       // TODO fix navbar 'fixed' height
 function App() {
+    let loggedIn = false;
+
   return (
     <Router>
       <div style={{ height: "100vh" }}>
@@ -41,7 +43,9 @@ function App() {
             alignItems: "center",
           }}
         >
-          <Route path="/" exact component={LoginPage} />
+          <Route path="/" exact>
+            {loggedIn ? <SignUpPage /> : <Redirect to="/login" />}
+          </Route>
           <Route path="/login" exact component={LoginPage} />
           <Route path="/signup" exact component={SignUpPage} />
         </div>
@@ -58,32 +62,5 @@ function App() {
     </Router>
   );
 }
-      //</Container>
-
-// style={{ minHeight: '100vh'}}
-/*
-        <Route
-          path="/"
-          exact
-          render={(props) => (
-            <>
-              <div className="">
-                <LinkContainer to="/test">
-                  <Button className="btn-lg btn-danger">Foo</Button>
-                </LinkContainer>
-              </div>
-            </>
-          )}
-        />
-        <Route
-          path="/test"
-          exact
-          render={(props) => (
-            <LinkContainer to="/">
-              <Button>Foo</Button>
-            </LinkContainer>
-          )}
-        />
-        */
 
 export default App;
