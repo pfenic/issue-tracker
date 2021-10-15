@@ -4,9 +4,10 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import Container from "react-bootstrap/Container";
 import LoginPage from "./components/LoginPage";
+import Button from "react-bootstrap/Button";
 
 // rafce
-      //<Container fluid className="p-0 min-vh-100 bg-secondary">
+      // TODO fix navbar 'fixed' height
 function App() {
   return (
     <Router>
@@ -20,7 +21,9 @@ function App() {
             <Navbar.Collapse>
               <Nav className="ms-auto">
                 <LinkContainer to="/">
-                  <Nav.Link>Sign up</Nav.Link>
+                  <Nav.Link>
+                    <Button variant="success">Sign up</Button>
+                  </Nav.Link>
                 </LinkContainer>
               </Nav>
             </Navbar.Collapse>
