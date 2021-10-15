@@ -6,6 +6,8 @@ import { useState } from "react";
 
 const LoginPage = () => {
     const [validated, setValidated] = useState(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
     const handleSubmit = (event) => {
         const form = event.currentTarget;
@@ -13,8 +15,8 @@ const LoginPage = () => {
             event.stopPropagation();
         }
 
-        console.log(form[0].value)
-        console.log(form[1].value)
+        console.log(email)
+        console.log(password)
         event.preventDefault();
         setValidated(true);
     };
@@ -29,16 +31,32 @@ const LoginPage = () => {
             controlId="loginEmail"
             className="text-dark mb-3"
           >
-            <Form.Control type="email" placeholder="your@email.com" required />
+            <Form.Control
+              type="email"
+              placeholder="your@email.com"
+              value={email}
+              onChange={(event) => {
+                setEmail(event.target.value);
+              }}
+              required
+            />
           </FloatingLabel>
           <FloatingLabel
             label="Password"
             controlId="loginPassword"
             className="text-dark mb-3"
           >
-            <Form.Control type="password" placeholder="Password" required />
+            <Form.Control
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(event) => {setPassword(event.target.value)}}
+              required
+            />
           </FloatingLabel>
-          <Button type="submit">Login</Button>
+          <Button type="submit" size="lg" className="w-100">
+            Login
+          </Button>
         </Form>
       </Card.Body>
     </Card>
