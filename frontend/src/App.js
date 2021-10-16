@@ -6,11 +6,24 @@ import Container from "react-bootstrap/Container";
 import LoginPage from "./components/LoginPage";
 import Button from "react-bootstrap/Button";
 import SignUpPage from "./components/SignUpPage";
+import HomePage from "./components/HomePage"
+import { useState } from "react"
 
 // rafce
       // TODO fix navbar 'fixed' height
 function App() {
-    let loggedIn = false;
+    const [loggedIn, setLoggedIn] = useState(false);
+
+    const logout = () => {
+      setLoggedIn(false);
+      console.log('loggout');
+    };
+
+    const login = () => {
+      setLoggedIn(true);
+      console.log('login');
+      <Redirect to="/" />
+    };
 
   return (
     <Router>
@@ -23,11 +36,19 @@ function App() {
             <Navbar.Toggle />
             <Navbar.Collapse>
               <Nav className="ms-auto">
-                <LinkContainer to="/signup">
+                {loggedIn ? (
                   <Nav.Link>
-                    <Button variant="success">Sign up</Button>
+                    <Button variant="danger" onClick={logout}>
+                      Log out
+                    </Button>
                   </Nav.Link>
-                </LinkContainer>
+                ) : (
+                  <LinkContainer to="/signup">
+                    <Nav.Link>
+                      <Button variant="success">Sign up</Button>
+                    </Nav.Link>
+                  </LinkContainer>
+                )}
               </Nav>
             </Navbar.Collapse>
           </Container>
@@ -44,9 +65,11 @@ function App() {
           }}
         >
           <Route path="/" exact>
-            {loggedIn ? <SignUpPage /> : <Redirect to="/login" />}
+            {loggedIn ? <HomePage /> : <Redirect to="/login" />}
           </Route>
-          <Route path="/login" exact component={LoginPage} />
+          <Route path="/login" exact>
+            <LoginPage onLogin={login} loggedIn={loggedIn} />
+          </Route>
           <Route path="/signup" exact component={SignUpPage} />
         </div>
 
