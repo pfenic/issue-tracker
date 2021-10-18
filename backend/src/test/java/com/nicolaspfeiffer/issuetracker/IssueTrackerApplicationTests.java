@@ -1,10 +1,10 @@
-package com.nicolaspfeiffer.backend;
+package com.nicolaspfeiffer.issuetracker;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class BackendApplicationTests {
+class IssueTrackerApplicationTests {
 
 	@Test
 	void contextLoads() {

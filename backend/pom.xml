@@ -9,12 +9,12 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.nicolaspfeiffer</groupId>
-	<artifactId>backend</artifactId>
+	<artifactId>issuetracker</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>backend</name>
+	<name>issuetracker</name>
 	<description>Backend for the Issue Tracker portfolio project</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>16</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
