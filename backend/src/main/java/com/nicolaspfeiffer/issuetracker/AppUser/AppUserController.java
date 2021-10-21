@@ -10,33 +10,23 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1/")
 @RequiredArgsConstructor
 public class AppUserController {
     private final AppUserService appUserService;
 
-    @GetMapping("/user/all")
+    // TODO: DEBUG REMOVE LATER
+    @CrossOrigin
+    @GetMapping("/user")
     public ResponseEntity<List<AppUser>> getUsers() {
         return ResponseEntity.ok().body(appUserService.getUsers());
     }
 
-    @PostMapping(path = "/user/add", consumes = "application/json")
-    public ResponseEntity<AppUser> addUser(@RequestBody SignUpUserData signUpUserData) {
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/add").toUriString());
-        AppUser user = new AppUser(
-                signUpUserData.getFirstName(),
-                signUpUserData.getLastName(),
-                signUpUserData.getEmail(),
-                signUpUserData.getPassword()
-        );
+    // TODO: DEBUG REMOVE LATER
+    @CrossOrigin
+    @PostMapping(path = "/user", consumes = "application/json")
+    public ResponseEntity<AppUser> addUser(@RequestBody AppUser user) {
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/user").toUriString());
         return ResponseEntity.created(uri).body(appUserService.saveUser(user));
     }
-}
-
-@Data
-class SignUpUserData {
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String password;
 }

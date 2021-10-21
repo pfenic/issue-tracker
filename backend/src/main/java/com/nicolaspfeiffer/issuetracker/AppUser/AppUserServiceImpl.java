@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AppUserServiceImpl implements AppUserService, UserDetailsService {
     private final AppUserRepository appUserRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -26,11 +28,14 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
         }
         // TODO: add roles
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        // TODO: DEBUG REMOVE LATER
+        authorities.add(new SimpleGrantedAuthority("ROLE_APPUSER"));
         return new User(user.getEmail(), user.getPassword(), authorities);
     }
 
     @Override
     public AppUser saveUser(AppUser user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return appUserRepository.save(user);
     }
 
