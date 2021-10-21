@@ -7,25 +7,46 @@ import { useState } from "react";
 import { LinkContainer } from "react-router-bootstrap";
 
 const SignUpPage = () => {
-    const [validated, setValidated] = useState(false);
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+  const [validated, setValidated] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-    const handleSubmit = (event) => {
-        const form = event.currentTarget;
-        if (form.checkValidity() === false) {
-            event.stopPropagation();
-        }
+  const handleSubmit = (event) => {
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.stopPropagation();
+    }
 
-        console.log(firstName)
-        console.log(lastName)
-        console.log(email)
-        console.log(password)
-        event.preventDefault();
-        setValidated(true);
+    console.log(firstName);
+    console.log(lastName);
+    console.log(email);
+    console.log(password);
+    event.preventDefault();
+    setValidated(true);
+
+    const signUp = async () => {
+      const res = await fetch("http://localhost:8080/api/v1/user", {
+      //const res = await fetch("/api/v1/user", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          password: password
+        })
+      });
+      const data = await res.json();
+
+      console.log(data);
     };
+
+    signUp();
+  };
 
   return (
     <Card bg="dark" text="light" className="p-1" style={{ width: "18rem" }}>
