@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Redirect} from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
@@ -6,27 +6,27 @@ import Container from "react-bootstrap/Container";
 import LoginPage from "./components/LoginPage";
 import Button from "react-bootstrap/Button";
 import SignUpPage from "./components/SignUpPage";
-import HomePage from "./components/HomePage"
-import { useState } from "react"
+import HomePage from "./components/HomePage";
+import { useState } from "react";
 
 // rafce
-      // TODO fix navbar 'fixed' height
+// TODO fix navbar 'fixed' height
 function App() {
-    const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
 
-    const logout = () => {
-      setLoggedIn(false);
-      console.log('loggout');
-    };
+  const logout = () => {
+    setLoggedIn(false);
+    console.log("loggout");
+  };
 
-    const login = () => {
-      setLoggedIn(true);
-      console.log('login');
-      <Redirect to="/" />
-    };
+  const login = () => {
+    setLoggedIn(true);
+    console.log("login");
+    <Redirect to="/" />;
+  };
 
   return (
-    <Router>
+    <Switch>
       <div style={{ height: "100vh" }}>
         <Navbar variant="dark" bg="dark" expand="sm" style={{ height: "4rem" }}>
           <Container>
@@ -82,7 +82,7 @@ function App() {
           </Container>
         </footer>
       </div>
-    </Router>
+    </Switch>
   );
 }
 

@@ -52,10 +52,14 @@ const LoginPage = ({ onLogin, loggedIn }) => {
 
   useEffect(() => {
       const fetchTasks = async () => {
+        try {
           const res = await fetch("http://localhost:5000/posts")
           const data = await res.json()
 
           console.log(data)
+        } catch (err) {
+          console.log(err);
+        }
       };
 
       fetchTasks();
