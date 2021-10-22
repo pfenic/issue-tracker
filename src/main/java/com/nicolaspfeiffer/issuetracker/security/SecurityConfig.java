@@ -57,10 +57,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .loginProcessingUrl("/api/login")
                     .loginPage("/")
                     .permitAll()
-                    .defaultSuccessUrl("/api/v1/user", true);
-                    //.defaultSuccessUrl("/", true);
-                    //.loginPage("/login")
-                    //.usernameParameter("username")
-                    //.passwordParameter("password")
+                    .usernameParameter("username")
+                    .passwordParameter("password")
+                    .successHandler((httpServletRequest, httpServletResponse, authentication) -> {
+                        httpServletResponse.setStatus(200);
+                    })
+                    .failureHandler(((httpServletRequest, httpServletResponse, authenticationException) -> {
+                        httpServletResponse.setStatus(401);
+                    }))
+                .and()
+                .rememberMe()
+                    .rememberMeParameter("remember")
+                .and()
+                .logout()
+                    .logoutUrl("/api/logout")
+                    .permitAll()
+                    .clearAuthentication(true)
+                    .invalidateHttpSession(true)
+                    .deleteCookies("JSESSIONID", "remember-me")
+                    .logoutSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> {
+                        httpServletResponse.setStatus(200);
+                    });
     }
 }

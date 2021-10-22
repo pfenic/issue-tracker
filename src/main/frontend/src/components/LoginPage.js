@@ -2,129 +2,113 @@ import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Button from "react-bootstrap/Button";
-import { Redirect } from "react-router";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { login } from "../actions/authActions";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
-const LoginPage = ({ onLogin, loggedIn }) => {
+const LoginPage = (props) => {
   const [validated, setValidated] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
 
   const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.stopPropagation();
-    }
-
-    console.log(email);
-    console.log(password);
-    console.log(remember);
-    return
     event.preventDefault();
 
+    const form = event.currentTarget;
+
     setValidated(true);
+    if (form.checkValidity() === false) {
+      event.stopPropagation(); // TODO is this necessary?
+      return;
+    }
 
-    const signUp = async () => {
-      const res = await fetch("http://localhost:8080/login", {
-        //const res = await fetch("/login", {
-        method: "POST",
-        
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-
-        body: new URLSearchParams({
-          username: email,
-          password: password,
-        }),
-      });
-      const data = await res.status;
-
-      console.log(data);
-      console.log(res)
+    const loginData = {
+      username: email,
+      password: password,
+      remember: remember,
     };
 
-    signUp();
-
-    //onLogin();
+    props.login(loginData);
   };
 
-  useEffect(() => {
-      const fetchTasks = async () => {
-        try {
-          const res = await fetch("http://localhost:5000/posts")
-          const data = await res.json()
-
-          console.log(data)
-        } catch (err) {
-          console.log(err);
-        }
-      };
-
-      fetchTasks();
-  }, []);
-
   return (
-    <>
-      {loggedIn ? (
-        <Redirect to="/" />
-      ) : (
-        <Card bg="dark" text="light" className="p-1" style={{ width: "18rem" }}>
-          <Card.Header as="h4">Login</Card.Header>
-          <Card.Body>
-            <Form noValidate validated={validated} onSubmit={handleSubmit} method="post" action="/api/login">
-              <FloatingLabel
-                label="Email address"
-                controlId="loginEmail"
-                className="text-dark mb-3"
-              >
-                <Form.Control
-                  type="email"
-                  placeholder="your@email.com"
-                  value={email}
-                  name="username"
-                  onChange={(event) => {
-                    setEmail(event.target.value);
-                  }}
-                  required
-                />
-              </FloatingLabel>
-              <FloatingLabel
-                label="Password"
-                controlId="loginPassword"
-                className="text-dark mb-3"
-              >
-                <Form.Control
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  name="password"
-                  onChange={(event) => {
-                    setPassword(event.target.value);
-                  }}
-                  required
-                />
-              </FloatingLabel>
-              <Form.Group className="mb-3">
-                <Form.Check
-                  label="Stay logged in"
-                  checked={remember}
-                  value={remember}
-                  onChange={(event) => {
-                    setRemember(event.currentTarget.checked);
-                  }}
-                />
-              </Form.Group>
-              <Button type="submit" size="lg" className="w-100">
-                Login
-              </Button>
-            </Form>
-          </Card.Body>
-        </Card>
-      )}
-    </>
+    <Card bg="dark" text="light" className="p-1" style={{ width: "18rem" }}>
+      <Card.Header as="h4">Login</Card.Header>
+      <Card.Body>
+        {props.loginFailed ? (
+          <p
+            className="bg-danger py-1 text-center text-dark"
+            style={{
+              borderRadius: "3%",
+              marginLeft: "1px",
+              marginRight: "1px",
+            }}
+          >
+            Invalid username or password
+          </p>
+        ) : (
+          <></>
+        )}
+        <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <FloatingLabel
+            label="Email address"
+            controlId="loginEmail"
+            className="text-dark mb-3"
+          >
+            <Form.Control
+              type="email"
+              placeholder="your@email.com"
+              value={email}
+              name="username"
+              onChange={(event) => {
+                setEmail(event.target.value);
+              }}
+              required
+            />
+          </FloatingLabel>
+          <FloatingLabel
+            label="Password"
+            controlId="loginPassword"
+            className="text-dark mb-3"
+          >
+            <Form.Control
+              type="password"
+              placeholder="Password"
+              value={password}
+              name="password"
+              onChange={(event) => {
+                setPassword(event.target.value);
+              }}
+              required
+            />
+          </FloatingLabel>
+          <Form.Group className="mb-3">
+            <Form.Check
+              label="Stay logged in"
+              checked={remember}
+              value={remember}
+              onChange={(event) => {
+                setRemember(event.currentTarget.checked);
+              }}
+            />
+          </Form.Group>
+          <Button type="submit" size="lg" className="w-100">
+            Login
+          </Button>
+        </Form>
+      </Card.Body>
+    </Card>
   );
 };
 
-export default LoginPage;
+LoginPage.propTypes = {
+  login: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = state => ({
+  loginFailed: state.auth.loginFailed
+});
+
+export default connect(mapStateToProps, { login })(LoginPage);
