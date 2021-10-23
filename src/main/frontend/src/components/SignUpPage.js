@@ -2,9 +2,8 @@ import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Button from "react-bootstrap/Button";
-import Stack from "react-bootstrap/Stack";
 import { useState } from "react";
-import { LinkContainer } from "react-router-bootstrap";
+import { useHistory } from "react-router";
 
 const SignUpPage = () => {
   const [validated, setValidated] = useState(false);
@@ -13,32 +12,37 @@ const SignUpPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const history = useHistory();
+
   const handleSubmit = (event) => {
+    event.preventDefault();
+
     const form = event.currentTarget;
+
+    setValidated(true);
     if (form.checkValidity() === false) {
-      event.stopPropagation();
+      event.stopPropagation(); // TODO: is this necessary?
+      return;
     }
 
     console.log(firstName);
     console.log(lastName);
     console.log(email);
     console.log(password);
-    event.preventDefault();
-    setValidated(true);
 
     const signUp = async () => {
-      const res = await fetch("http://localhost:8080/api/v1/user", {
-      //const res = await fetch("/api/v1/user", {
+      const res = await fetch("http://localhost:8080/api/v1/registration", {
+        //const res = await fetch("/api/v1/user", {
         method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           firstName: firstName,
           lastName: lastName,
           email: email,
-          password: password
-        })
+          password: password,
+        }),
       });
       const data = await res.json();
 
@@ -46,6 +50,10 @@ const SignUpPage = () => {
     };
 
     signUp();
+  };
+
+  const cancel = () => {
+    history.push("/");
   };
 
   return (
@@ -113,17 +121,23 @@ const SignUpPage = () => {
               required
             />
           </FloatingLabel>
-          <Stack direction="horizontal" gap={3}>
-            <Button variant="success" type="submit" size="lg" className="w-100">
-              Sign up
-            </Button>
-            <LinkContainer to="/">
-              <Button variant="outline-danger" size="lg" className="w-100">
-                Cancel
-              </Button>
-            </LinkContainer>
-          </Stack>
+          <Button
+            variant="success"
+            type="submit"
+            size="lg"
+            className="w-100 mb-3"
+          >
+            Sign up
+          </Button>
         </Form>
+        <Button
+          variant="outline-danger"
+          size="lg"
+          className="w-100"
+          onClick={cancel}
+        >
+          Cancel
+        </Button>
       </Card.Body>
     </Card>
   );
