@@ -1,6 +1,5 @@
-package com.nicolaspfeiffer.issuetracker.AppUser;
+package com.nicolaspfeiffer.issuetracker.auth;
 
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,23 +9,25 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
 public class AppUserController {
     private final AppUserService appUserService;
 
     // TODO: DEBUG REMOVE LATER
     @CrossOrigin
-    @GetMapping("/user")
-    public ResponseEntity<List<AppUser>> getUsers() {
-        return ResponseEntity.ok().body(appUserService.getUsers());
+    @GetMapping("/self")
+    public ResponseEntity<AppUser> getSelf() {
+        // TODO userID
+        return ResponseEntity.ok().body(appUserService.getUser(0L));
     }
 
     // TODO: DEBUG REMOVE LATER
     @CrossOrigin
-    @PostMapping(path = "/user", consumes = "application/json")
-    public ResponseEntity<AppUser> addUser(@RequestBody AppUser user) {
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/user").toUriString());
-        return ResponseEntity.created(uri).body(appUserService.saveUser(user));
+    @GetMapping("/all")
+    public ResponseEntity<List<AppUser>> getUsers() {
+        var users = appUserService.getUsers();
+        users.forEach(appUser -> appUser.setPassword(null));
+        return ResponseEntity.ok().body(users);
     }
 }

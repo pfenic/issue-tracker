@@ -1,14 +1,11 @@
 package com.nicolaspfeiffer.issuetracker;
 
-import com.nicolaspfeiffer.issuetracker.AppUser.AppUser;
-import com.nicolaspfeiffer.issuetracker.AppUser.AppUserService;
+import com.nicolaspfeiffer.issuetracker.auth.AppUser;
+import com.nicolaspfeiffer.issuetracker.auth.AppUserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -34,7 +31,14 @@ public class IssueTrackerApplication {
     @Bean
     CommandLineRunner run(AppUserService appUserService) {
         return args -> {
-            appUserService.saveUser(new AppUser("nico", "pe", "nico@pe.com", "1234"));
+            appUserService.saveUser(new AppUser(
+                    "nico@pe.com",
+                    "1234",
+                    true,
+                    true,
+                    true,
+                    true)
+            );
         };
     }
 }

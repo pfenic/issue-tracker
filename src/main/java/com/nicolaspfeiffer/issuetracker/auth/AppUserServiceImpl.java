@@ -1,10 +1,8 @@
-package com.nicolaspfeiffer.issuetracker.AppUser;
+package com.nicolaspfeiffer.issuetracker.auth;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,33 +13,35 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class AppUserServiceImpl implements AppUserService, UserDetailsService {
+public class AppUserServiceImpl implements AppUserService {
     private final AppUserRepository appUserRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        AppUser user = appUserRepository.findByEmail(email);
-        if (user == null) {
-            // TODO: fix message string
-            throw new UsernameNotFoundException("User not found in the database");
-        }
-        // TODO: add roles
-        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        // TODO: DEBUG REMOVE LATER
-        authorities.add(new SimpleGrantedAuthority("ROLE_APPUSER"));
-        return new User(user.getEmail(), user.getPassword(), authorities);
+        // TODO: fix message string
+        return appUserRepository.findByEmail(email)
+                .orElseThrow(() ->
+                    new UsernameNotFoundException("User not found in the database")
+                );
     }
 
     @Override
     public AppUser saveUser(AppUser user) {
+        // TODO: add roles
+        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return appUserRepository.save(user);
     }
 
     @Override
     public AppUser getUser(String email) {
-        return appUserRepository.findByEmail(email);
+        return appUserRepository.findByEmail(email).orElseThrow();
+    }
+
+    @Override
+    public AppUser getUser(Long id) {
+        return appUserRepository.getById(id);
     }
 
     @Override
