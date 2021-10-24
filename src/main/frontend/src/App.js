@@ -1,4 +1,4 @@
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Redirect } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
@@ -9,12 +9,14 @@ import SignUpPage from "./components/SignUpPage";
 import HomePage from "./components/HomePage";
 import LogoutButton from "./components/LogoutButton";
 import { connect } from "react-redux";
+import ConditionalRoute from "./components/ConditionalRoute";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 // rafce
 // TODO fix navbar 'fixed' height
 const App = (props) => {
   //useEffect(() => {
-    /*
+  /*
       const fetchTasks = async () => {
         try {
           const res = await fetch("http://localhost:5000/posts")
@@ -67,11 +69,22 @@ const App = (props) => {
         }}
       >
         <Switch>
-          <Route path="/" exact>
-            {props.loggedIn ? <HomePage /> : <Redirect to="/login" />}
-          </Route>
-          <Route path="/login" exact component={LoginPage} />
-          <Route path="/signup" exact component={SignUpPage} />
+          <ProtectedRoute path="/projects" exact component={HomePage} />
+          <ConditionalRoute
+            path="/login"
+            exact
+            condition={!props.loggedIn}
+            redirectPath="/"
+            component={LoginPage}
+          />
+          <ConditionalRoute
+            path="/signup"
+            exact
+            condition={!props.loggedIn}
+            redirectPath="/"
+            component={SignUpPage}
+          />
+          <Redirect to="/projects" />
         </Switch>
       </div>
 
@@ -85,10 +98,10 @@ const App = (props) => {
       </footer>
     </div>
   );
-}
+};
 
-const mapStateToProps = state => ({
-  loggedIn: state.auth.loggedIn
-})
+const mapStateToProps = (state) => ({
+  loggedIn: state.auth.loggedIn,
+});
 
 export default connect(mapStateToProps, null)(App);
