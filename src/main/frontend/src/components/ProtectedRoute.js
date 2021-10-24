@@ -1,28 +1,19 @@
-import { Route, Redirect } from "react-router-dom";
-import auth from "../auth";
+import { connect } from "react-redux";
+import ConditionalRoute from "./ConditionalRoute";
 
-const ProtectedRoute = ({ component: Component, ...rest }) => {
+const ProtectedRoute = ({ component: Component, loggedIn, ...rest }) => {
   return (
-    <Route
+    <ConditionalRoute
       {...rest}
-      render={(props) => {
-        if (auth.isLoggedIn()) {
-          return <Component {...props} />;
-        } else {
-          return (
-            <Redirect
-              to={{
-                pathname: "/login",
-                state: {
-                  from: props.location,
-                },
-              }}
-            />
-          );
-        }
-      }}
+      condition={loggedIn}
+      redirectPath="/login"
+      component={Component}
     />
   );
 };
 
-export default ProtectedRoute;
+const mapStateToProps = state => ({
+  loggedIn: state.auth.loggedIn
+})
+
+export default connect(mapStateToProps, null)(ProtectedRoute);
