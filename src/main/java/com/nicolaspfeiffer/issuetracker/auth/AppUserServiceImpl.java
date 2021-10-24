@@ -45,6 +45,16 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
+    public Boolean existsUser(String email) {
+        return appUserRepository.findByEmail(email).isPresent();
+    }
+
+    @Override
+    public Boolean existsUser(Long id) {
+        return appUserRepository.existsById(id);
+    }
+
+    @Override
     public List<AppUser> getUsers() {
         return appUserRepository.findAll();
     }

@@ -1,9 +1,7 @@
 package com.nicolaspfeiffer.issuetracker.registration;
 
 import com.nicolaspfeiffer.issuetracker.auth.AppUser;
-import com.nicolaspfeiffer.issuetracker.auth.AppUserRepository;
-import com.nicolaspfeiffer.issuetracker.project.Project;
-import com.nicolaspfeiffer.issuetracker.project.ProjectRepository;
+import com.nicolaspfeiffer.issuetracker.auth.AppUserService;
 import com.nicolaspfeiffer.issuetracker.userprofile.UserProfile;
 import com.nicolaspfeiffer.issuetracker.userprofile.UserProfileRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class RegistrationServiceImpl implements RegistrationService {
-    private final AppUserRepository appUserRepository;
+    private final AppUserService appUserService;
     private final UserProfileRepository userProfileRepository;
 
     @Override
@@ -26,11 +24,9 @@ public class RegistrationServiceImpl implements RegistrationService {
             throw new IllegalArgumentException("required parameter cannot be empty string");
         }
 
-        appUserRepository
-                .findByEmail(request.getEmail())
-                .ifPresent(user -> {
-                    throw new IllegalStateException("email already taken");
-                });
+        if (appUserService.existsUser(request.getEmail())) {
+            throw new IllegalStateException("email already taken");
+        }
 
         var user = new AppUser(
                 request.getEmail(),
@@ -49,7 +45,7 @@ public class RegistrationServiceImpl implements RegistrationService {
         user.setProfile(profile);
 
         userProfileRepository.save(profile);
-        appUserRepository.save(user);
+        appUserService.saveUser(user);
 
         return null;
     }
