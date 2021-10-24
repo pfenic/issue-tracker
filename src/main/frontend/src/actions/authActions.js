@@ -1,8 +1,7 @@
 import { LOGIN, LOGOUT } from "./types";
 
 export const login = (loginData) => async (dispatch) => {
-  //const res = await fetch("/api/login", {
-  const res = await fetch("http://localhost:8080/api/login", {
+  const res = await fetch("/api/login", {
     method: "POST",
 
     headers: {
@@ -32,8 +31,7 @@ export const login = (loginData) => async (dispatch) => {
 };
 
 export const logout = () => async (dispatch) => {
-  // TODO logout
-  const res = await fetch("http://localhost:8080/api/logout", {
+  const res = await fetch("/api/logout", {
     method: "POST",
   });
 
