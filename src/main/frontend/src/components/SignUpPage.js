@@ -43,9 +43,16 @@ const SignUpPage = () => {
           password: password,
         }),
       });
-      const data = await res.json();
 
-      console.log(data);
+      const status = await res.status;
+
+      // TODO implement confirmation email stuff
+      if (status === 200) {
+        cancel()
+      } else {
+        const data = await res.json()
+        alert(data.message)
+      }
     };
 
     signUp();

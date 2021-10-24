@@ -19,14 +19,13 @@ export const login = (loginData) => async (dispatch) => {
       payload: true,
     });
   } else if (status === 401) {
-    // TODO dispatch action
-    // Set Login to false?
     dispatch({
       type: LOGIN,
       payload: false,
     });
   } else {
     // TODO handle other status
+    throw new Error("unexpected error")
   }
 };
 
@@ -43,8 +42,7 @@ export const logout = () => async (dispatch) => {
       payload: true,
     });
   } else {
-    // TODO dispatch action
-    // Set Login to false?
     // TODO handle other status
+    throw new Error("unexpected error")
   }
 };

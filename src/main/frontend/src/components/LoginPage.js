@@ -108,6 +108,7 @@ LoginPage.propTypes = {
 };
 
 const mapStateToProps = state => ({
+  loggedIn: state.auth.loggedIn,
   loginFailed: state.auth.loginFailed
 });
 
