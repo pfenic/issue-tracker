@@ -15,23 +15,6 @@ import ProtectedRoute from "./components/ProtectedRoute";
 // rafce
 // TODO fix navbar 'fixed' height
 const App = (props) => {
-  //useEffect(() => {
-  /*
-      const fetchTasks = async () => {
-        try {
-          const res = await fetch("http://localhost:5000/posts")
-          const data = await res.json()
-
-          console.log(data)
-        } catch (err) {
-          console.log(err);
-        }
-      };
-
-      fetchTasks();
-      */
-  //}, []);
-
   return (
     <div style={{ height: "100vh" }}>
       <Navbar variant="dark" bg="dark" expand="sm" style={{ height: "4rem" }}>

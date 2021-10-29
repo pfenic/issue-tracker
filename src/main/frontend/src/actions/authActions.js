@@ -1,5 +1,12 @@
 import { LOGIN, LOGOUT } from "./types";
 
+export const setLoggedIn = () => (dispatch) => {
+    dispatch({
+      type: LOGIN,
+      payload: true,
+    });
+};
+
 export const login = (loginData) => async (dispatch) => {
   const res = await fetch("/api/login", {
     method: "POST",

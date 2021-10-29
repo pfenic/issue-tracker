@@ -6,8 +6,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 public class IssueTrackerApplication {
@@ -16,16 +15,9 @@ public class IssueTrackerApplication {
 		SpringApplication.run(IssueTrackerApplication.class, args);
 	}
 
-    // TODO: DEBUG REMOVE LATER
     @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                //registry.addMapping("/greeting-javaconfig").allowedOrigins("http://localhost:8080");
-                registry.addMapping("/login").allowedMethods("GET", "POST", "OPTIONS");
-            }
-        };
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 
     @Bean

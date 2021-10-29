@@ -15,4 +15,6 @@ public class RegistrationRequest {
     private final String email;
     @NonNull
     private final String password;
+    @NonNull
+    private final String captcha;
 }

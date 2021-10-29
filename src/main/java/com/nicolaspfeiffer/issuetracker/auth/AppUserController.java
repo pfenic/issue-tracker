@@ -8,22 +8,20 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+// TODO: DEBUG REMOVE LATER
+@CrossOrigin
 @RestController
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
 public class AppUserController {
     private final AppUserService appUserService;
 
-    // TODO: DEBUG REMOVE LATER
-    @CrossOrigin
     @GetMapping("/self")
     public ResponseEntity<AppUser> getSelf() {
         // TODO userID
         return ResponseEntity.ok().body(appUserService.getUser(0L));
     }
 
-    // TODO: DEBUG REMOVE LATER
-    @CrossOrigin
     @GetMapping("/all")
     public ResponseEntity<List<AppUser>> getUsers() {
         var users = appUserService.getUsers();

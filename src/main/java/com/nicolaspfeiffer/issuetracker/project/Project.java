@@ -1,13 +1,19 @@
 package com.nicolaspfeiffer.issuetracker.project;
 
+import com.nicolaspfeiffer.issuetracker.issue.Issue;
+import com.nicolaspfeiffer.issuetracker.userprofile.UserProfile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.SEQUENCE;
 
 @Getter
@@ -46,6 +52,18 @@ public class Project {
             columnDefinition = "TEXT"
     )
     private String name;
+
+    @ManyToOne(
+            fetch = LAZY,
+            optional = false
+    )
+    private UserProfile owner;
+
+    @ManyToMany(fetch = LAZY)
+    private Collection<UserProfile> users = new ArrayList<>();
+
+    @OneToMany(fetch = LAZY)
+    private Collection<Issue> issues = new ArrayList<>();
 
     public Project(String name) {
         this.name = name;

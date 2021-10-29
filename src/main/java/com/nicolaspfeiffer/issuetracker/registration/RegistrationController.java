@@ -15,8 +15,6 @@ import java.net.URI;
 public class RegistrationController {
     private final RegistrationService registrationService;
 
-    // TODO: DEBUG REMOVE LATER
-    @CrossOrigin
     @PostMapping(consumes = "application/json")
     public ResponseEntity<AppUser> addUser(@RequestBody RegistrationRequest request) {
         registrationService.register(request);

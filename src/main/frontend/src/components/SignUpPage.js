@@ -4,6 +4,9 @@ import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Button from "react-bootstrap/Button";
 import { useState } from "react";
 import { useHistory } from "react-router";
+import ReCAPTCHA from "react-google-recaptcha";
+
+const captchaKey = "6LeQJPgcAAAAAFx_GYNfDn2NyRZRO2c4R-xqgt3g";
 
 const SignUpPage = () => {
   const [validated, setValidated] = useState(false);
@@ -11,6 +14,7 @@ const SignUpPage = () => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [captchaValue, setCaptchaValue] = useState(null)
 
   const history = useHistory();
 
@@ -25,10 +29,18 @@ const SignUpPage = () => {
       return;
     }
 
+    if (!captchaValue) {
+      // TODO: better notification
+      alert("Please confirm that you are not a robot")
+      event.stopPropagation(); // TODO: is this necessary?
+      return;
+    }
+
     console.log(firstName);
     console.log(lastName);
     console.log(email);
     console.log(password);
+    console.log(captchaValue);
 
     const signUp = async () => {
       const res = await fetch("/api/v1/registration", {
@@ -41,16 +53,18 @@ const SignUpPage = () => {
           lastName: lastName,
           email: email,
           password: password,
+          captcha: captchaValue
         }),
       });
 
       const status = await res.status;
 
-      // TODO implement confirmation email stuff
+      // TODO: implement confirmation email stuff
       if (status === 200) {
         cancel()
       } else {
         const data = await res.json()
+        // TODO: better notification
         alert(data.message)
       }
     };
@@ -62,8 +76,12 @@ const SignUpPage = () => {
     history.push("/");
   };
 
+  const captchaChange = (value) => {
+    setCaptchaValue(value);
+  }
+
   return (
-    <Card bg="dark" text="light" className="p-1" style={{ width: "18rem" }}>
+    <Card bg="dark" text="light" className="p-1" style={{ width: "21.45rem" }}>
       <Card.Header as="h4">Sign Up</Card.Header>
       <Card.Body>
         <Form noValidate validated={validated} onSubmit={handleSubmit}>
@@ -127,6 +145,12 @@ const SignUpPage = () => {
               required
             />
           </FloatingLabel>
+          <ReCAPTCHA
+            sitekey={captchaKey}
+            size="normal"
+            onChange={captchaChange}
+            className="mb-3"
+          />
           <Button
             variant="success"
             type="submit"
