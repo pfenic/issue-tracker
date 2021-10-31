@@ -2,34 +2,49 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Stack from "react-bootstrap/Stack";
 import ListGroup from "react-bootstrap/ListGroup";
+import { useState, useEffect } from "react";
+import { LinkContainer } from "react-router-bootstrap";
 
 const HomePage = () => {
-    return (
-      <div className="container-sm">
-        <Card bg="dark" text="light" className="p-1 vw-lg-100">
-          <Card.Header>
-            <Stack direction="horizontal" gap={3}>
-              <h4>Projects</h4>
+  const [projects, setProjects] = useState([])
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      const res = await fetch("/api/v1/profile/self")
+      const data = await res.json();
+      setProjects(data.projects)
+    }
+
+    fetchProjects()
+  }, [])
+
+  return (
+    <div className="container-sm">
+      <Card bg="dark" text="light" className="p-1 vw-lg-100">
+        <Card.Header>
+          <Stack direction="horizontal" gap={3}>
+            <h4>Projects</h4>
+            <LinkContainer to="/projects/new">
               <Button variant="success" className="ms-auto">
                 Create Project
               </Button>
-            </Stack>
-          </Card.Header>
-          <Card.Body>
-            <Card bg="secondary" text="dark" className="p-1 vw-lg-100">
-              <ListGroup variant="flush">
-                <ListGroup.Item action variant="dark">
-                  Titel
+            </LinkContainer>
+          </Stack>
+        </Card.Header>
+        <Card.Body>
+          <Card bg="secondary" text="dark" className="p-1 vw-lg-100">
+            <ListGroup variant="flush">
+              {projects.map((project) => (
+                <ListGroup.Item key={project.id} action variant="dark">
+                  {project.name}
                 </ListGroup.Item>
-                <ListGroup.Item action variant="secondary">
-                  Titel
-                </ListGroup.Item>
-              </ListGroup>
-            </Card>
-          </Card.Body>
-        </Card>
-      </div>
-    );
-}
+              ))}
+            </ListGroup>
+          </Card>
+        </Card.Body>
+      </Card>
+    </div>
+  );
+};
 
-export default HomePage
+export default HomePage;

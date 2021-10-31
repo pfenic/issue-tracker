@@ -1,5 +1,6 @@
 package com.nicolaspfeiffer.issuetracker.project;
 
+import com.fasterxml.jackson.annotation.*;
 import com.nicolaspfeiffer.issuetracker.issue.Issue;
 import com.nicolaspfeiffer.issuetracker.userprofile.UserProfile;
 import lombok.AllArgsConstructor;
@@ -30,6 +31,10 @@ import static javax.persistence.GenerationType.SEQUENCE;
                 )
         }
 )
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id"
+)
 public class Project {
     @SequenceGenerator(
             name = "project_sequence",
@@ -53,8 +58,15 @@ public class Project {
     )
     private String name;
 
+    @Column(
+            name = "description",
+            nullable = true,
+            columnDefinition = "TEXT"
+    )
+    private String description;
+
     @ManyToOne(
-            fetch = LAZY,
+            fetch = EAGER,
             optional = false
     )
     private UserProfile owner;
@@ -65,7 +77,20 @@ public class Project {
     @OneToMany(fetch = LAZY)
     private Collection<Issue> issues = new ArrayList<>();
 
-    public Project(String name) {
+    public Project(String name, String description) {
         this.name = name;
+        this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "Project{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", owner=" + owner +
+                ", users=" + users +
+                ", issues=" + issues +
+                '}';
     }
 }

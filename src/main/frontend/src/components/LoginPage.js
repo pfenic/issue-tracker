@@ -2,8 +2,8 @@ import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Button from "react-bootstrap/Button";
-import { useState, useEffect } from "react";
-import { login, setLoggedIn } from "../actions/authActions";
+import { useState } from "react";
+import { login } from "../actions/authActions";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
@@ -12,29 +12,6 @@ const LoginPage = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
-
-  const setLoggedIn = props.setLoggedIn;
-
-  useEffect(() => {
-      const tryLoadProfile = async () => {
-        try {
-          const res = await fetch("/api/v1/profile/self", {
-            redirect: "error"
-          })
-          const data = await res.json()
-
-          setLoggedIn();
-
-          // TODO save user
-          console.log(data)
-        } catch (err) {
-          console.log(err);
-        }
-      };
-
-
-      tryLoadProfile();
-  }, [setLoggedIn]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -128,12 +105,10 @@ const LoginPage = (props) => {
 
 LoginPage.propTypes = {
   login: PropTypes.func.isRequired,
-  setLoggedIn: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  loggedIn: state.auth.loggedIn,
   loginFailed: state.auth.loginFailed
 });
 
-export default connect(mapStateToProps, { login, setLoggedIn })(LoginPage);
+export default connect(mapStateToProps, { login })(LoginPage);

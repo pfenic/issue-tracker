@@ -11,10 +11,37 @@ import LogoutButton from "./components/LogoutButton";
 import { connect } from "react-redux";
 import ConditionalRoute from "./components/ConditionalRoute";
 import ProtectedRoute from "./components/ProtectedRoute";
+import NewProjectPage from "./components/NewProjectPage"
+import PropTypes from "prop-types";
+import { setLoggedIn } from "./actions/authActions";
+import { useEffect } from "react";
 
 // rafce
 // TODO fix navbar 'fixed' height
 const App = (props) => {
+  const setLoggedIn = props.setLoggedIn;
+
+  useEffect(() => {
+      const tryLoadProfile = async () => {
+        try {
+          const res = await fetch("/api/v1/profile/self", {
+            redirect: "error"
+          })
+          const data = await res.json()
+
+          setLoggedIn();
+
+          // TODO save user
+          console.log(data)
+        } catch (err) {
+          console.log(err);
+        }
+      };
+
+
+      tryLoadProfile();
+  }, [setLoggedIn]);
+
   return (
     <div style={{ height: "100vh" }}>
       <Navbar variant="dark" bg="dark" expand="sm" style={{ height: "4rem" }}>
@@ -53,6 +80,7 @@ const App = (props) => {
       >
         <Switch>
           <ProtectedRoute path="/projects" exact component={HomePage} />
+          <ProtectedRoute path="/projects/new" exact component={NewProjectPage} />
           <ConditionalRoute
             path="/login"
             exact
@@ -83,8 +111,12 @@ const App = (props) => {
   );
 };
 
+App.propTypes = {
+  setLoggedIn: PropTypes.func.isRequired
+};
+
 const mapStateToProps = (state) => ({
   loggedIn: state.auth.loggedIn,
 });
 
-export default connect(mapStateToProps, null)(App);
+export default connect(mapStateToProps, { setLoggedIn })(App);

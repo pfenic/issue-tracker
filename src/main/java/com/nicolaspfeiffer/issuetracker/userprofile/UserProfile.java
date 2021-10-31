@@ -1,5 +1,8 @@
 package com.nicolaspfeiffer.issuetracker.userprofile;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.nicolaspfeiffer.issuetracker.project.Project;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,6 +30,10 @@ import static javax.persistence.GenerationType.SEQUENCE;
                         columnNames = "email"
                 )
         }
+)
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id"
 )
 public class UserProfile {
     @SequenceGenerator(

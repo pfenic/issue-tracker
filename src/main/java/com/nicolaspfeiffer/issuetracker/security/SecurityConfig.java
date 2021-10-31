@@ -40,18 +40,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
          */
+        // TODO: send 403 instead of redirect or better 401? maybe depending on logged in or not
+        // http.exceptionHandling().authenticationEntryPoint(new Http403ForbiddenEntryPoint());
         http
                 .authorizeRequests()
-                .antMatchers("/", "index", "/css/**", "/js/**", "/static/**")
+                .antMatchers("/", "index", "favicon.ico", "logo192.png", "/css/**", "/js/**", "/static/**")
                     .permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/registration")
                     .permitAll()
                 .antMatchers(HttpMethod.OPTIONS, "/api/v1/registration")
                     .permitAll()
-                .antMatchers(HttpMethod.GET, "/api/v1/user")
+                .antMatchers(HttpMethod.GET, "/api/v1/profile")
+                .hasAnyRole("APPUSER")
+                .antMatchers(HttpMethod.GET, "/api/v1/project**")
                     .hasAnyRole("APPUSER")
+                .antMatchers("/api/v1/user/all")
+                    .hasRole("ADMIN")
                 .anyRequest()
-                .authenticated()
+                    .authenticated()
                 .and()
                 .formLogin()
                     .loginProcessingUrl("/api/login")
