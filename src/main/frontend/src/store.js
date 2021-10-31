@@ -6,13 +6,11 @@ const initalState = {};
 const middleware = [thunk];
 
 const enhancer = [
-    applyMiddleware(...middleware),
+    applyMiddleware(...middleware)
 ];
 
-if (process.env.NODE_ENV === "development") {
-  enhancer.push(
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-  );
+if (process.env.NODE_ENV === "development" && window.__REDUX_DEVTOOLS_EXTENSION__) {
+  enhancer.push(window.__REDUX_DEVTOOLS_EXTENSION__());
 }
 
 const store = createStore(rootReducer, initalState, compose(...enhancer));
