@@ -13,14 +13,12 @@ import ConditionalRoute from "./components/ConditionalRoute";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NewProjectPage from "./components/NewProjectPage"
 import PropTypes from "prop-types";
-import { setLoggedIn } from "./actions/authActions";
+import { update } from "./actions/updateAction";
 import { useEffect } from "react";
 
 // rafce
 // TODO fix navbar 'fixed' height
 const App = (props) => {
-  const setLoggedIn = props.setLoggedIn;
-
   useEffect(() => {
       const tryLoadProfile = async () => {
         try {
@@ -29,18 +27,24 @@ const App = (props) => {
           })
           const data = await res.json()
 
-          setLoggedIn();
-
           // TODO save user
+          props.update({
+            profile: data,
+            projects: data.projects,
+            login: true,
+          });
           console.log(data)
         } catch (err) {
+          props.update({
+            login: false,
+          });
           console.log(err);
         }
       };
 
 
       tryLoadProfile();
-  }, [setLoggedIn]);
+  }, []);
 
   return (
     <div style={{ height: "100vh" }}>
@@ -112,11 +116,11 @@ const App = (props) => {
 };
 
 App.propTypes = {
-  setLoggedIn: PropTypes.func.isRequired
+  update: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
   loggedIn: state.auth.loggedIn,
 });
 
-export default connect(mapStateToProps, { setLoggedIn })(App);
+export default connect(mapStateToProps, { update })(App);

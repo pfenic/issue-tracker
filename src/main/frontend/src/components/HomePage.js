@@ -2,10 +2,11 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Stack from "react-bootstrap/Stack";
 import ListGroup from "react-bootstrap/ListGroup";
-import { useState, useEffect } from "react";
 import { LinkContainer } from "react-router-bootstrap";
+import { connect } from "react-redux";
 
-const HomePage = () => {
+const HomePage = (props) => {
+  /*
   const [projects, setProjects] = useState([])
 
   useEffect(() => {
@@ -17,6 +18,7 @@ const HomePage = () => {
 
     fetchProjects()
   }, [])
+  */
 
   return (
     <div className="container-sm">
@@ -34,7 +36,7 @@ const HomePage = () => {
         <Card.Body>
           <Card bg="secondary" text="dark" className="p-1 vw-lg-100">
             <ListGroup variant="flush">
-              {projects.map((project) => (
+              {props.projects.map((project) => (
                 <ListGroup.Item key={project.id} action variant="dark">
                   {project.name}
                 </ListGroup.Item>
@@ -47,4 +49,8 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+const mapStateToProps = (state) => ({
+  projects: state.projects.projects,
+});
+
+export default connect(mapStateToProps, null)(HomePage);

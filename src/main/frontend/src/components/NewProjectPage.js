@@ -8,6 +8,7 @@ import { useHistory } from "react-router";
 const SignUpPage = () => {
   const [validated, setValidated] = useState(false);
   const [isValid, setIsValid] = useState(false);
+  const [hasFocus, setHasFocus] = useState(false);
   const [projectName, setProjectName] = useState("");
   const [description, setDescription] = useState("");
 
@@ -116,14 +117,22 @@ const SignUpPage = () => {
                 type="text"
                 placeholder="project"
                 value={projectName}
+                onFocus={() => {
+                  setHasFocus(true);
+                }}
+                onBlur={() => {
+                  setHasFocus(false);
+                }
+                }
                 onChange={(event) => {
                   handlelNameChange(event.target.value);
                 }}
                 isValid={validated && isValid}
                 isInvalid={validated && !isValid}
+                autoComplete="off"
                 required
               />
-              <Form.Control.Feedback tooltip type="valid">
+              <Form.Control.Feedback tooltip type="valid" hidden={!hasFocus}>
                 <b>{projectName}</b> is available.
               </Form.Control.Feedback>
               <Form.Control.Feedback tooltip type="invalid">
@@ -148,6 +157,7 @@ const SignUpPage = () => {
                 onChange={(event) => {
                   setDescription(event.target.value);
                 }}
+                autoComplete="off"
               />
             </FloatingLabel>
             <Button
