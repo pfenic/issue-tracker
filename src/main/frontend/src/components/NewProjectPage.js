@@ -4,8 +4,10 @@ import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Button from "react-bootstrap/Button";
 import { useState } from "react";
 import { useHistory } from "react-router";
+import { connect } from "react-redux";
+import { addProject } from "../actions/projectActions";
 
-const SignUpPage = () => {
+const NewProjectPage = (props) => {
   const [validated, setValidated] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const [hasFocus, setHasFocus] = useState(false);
@@ -18,10 +20,10 @@ const SignUpPage = () => {
     event.preventDefault();
 
     const form = event.currentTarget;
-    const valid = form.checkValidity() && isValid
+    const valid = form.checkValidity() && isValid;
 
     setValidated(true);
-    setIsValid(valid)
+    setIsValid(valid);
 
     if (!valid) {
       event.stopPropagation(); // TODO: is this necessary?
@@ -48,13 +50,14 @@ const SignUpPage = () => {
       console.log(data);
 
       if (status === 200) {
-          // TODO: add to state
-          // TODO: go to created project's page
-        goBack()
+        // TODO: add to state
+        // TODO: go to created project's page
+        props.addProject(data);
+        goBack();
       } else {
-        const data = await res.json()
+        const data = await res.json();
         // TODO: better notification
-        alert(data.message)
+        alert(data.message);
       }
     };
 
@@ -93,7 +96,7 @@ const SignUpPage = () => {
       try {
         const res = await fetch(`/api/v1/project/${name}/exists`);
         const data = await res.json();
-        setIsValid(data === false)
+        setIsValid(data === false);
       } catch (err) {}
     };
 
@@ -122,8 +125,7 @@ const SignUpPage = () => {
                 }}
                 onBlur={() => {
                   setHasFocus(false);
-                }
-                }
+                }}
                 onChange={(event) => {
                   handlelNameChange(event.target.value);
                 }}
@@ -183,5 +185,4 @@ const SignUpPage = () => {
   );
 };
 
-export default SignUpPage;
-
+export default connect(null, { addProject })(NewProjectPage);

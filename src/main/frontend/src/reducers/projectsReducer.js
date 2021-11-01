@@ -1,4 +1,4 @@
-import { UPDATE } from "../actions/types";
+import { ADD_PROJECT, UPDATE } from "../actions/types";
 
 const initialState = {
   projects: [],
@@ -15,6 +15,12 @@ const projectsReducer = (state = initialState, action) => {
       } else {
         return state;
       }
+      case ADD_PROJECT:
+          console.log(state);
+          return {
+              ...state,
+              projects: [...state.projects, action.payload]
+          }
     default:
       return state;
   }
