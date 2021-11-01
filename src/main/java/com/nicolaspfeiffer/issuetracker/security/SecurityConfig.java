@@ -44,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // http.exceptionHandling().authenticationEntryPoint(new Http403ForbiddenEntryPoint());
         http
                 .authorizeRequests()
-                .antMatchers("/", "index", "favicon.ico", "logo192.png", "/css/**", "/js/**", "/static/**")
+                .antMatchers("/", "/index.html", "/favicon.ico", "/logo192.png", "/static/**")
                     .permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/registration")
                     .permitAll()
